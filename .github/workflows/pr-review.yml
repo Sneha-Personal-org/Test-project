@@ -1,40 +1,19 @@
-name: Assign Peer Reviewers
+name: Assign Reviewer on Label
 
 on:
-  pull_request:
+  issues:
     types: [labeled]
 
 jobs:
-  assign-reviewers:
-    runs-on: ubuntu-latest
+  assign-reviewer:
     if: github.event.label.name == 'READY FOR PEER REVIEW'
+    runs-on: ubuntu-latest
     steps:
-      - name: Assign team members as reviewers
-        uses: actions/github-script@v6
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Assign reviewer
+        uses: pull-reminders/assign-reviewer@v2
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const teamSlug = 'test-peer-reviewers';
-            const org = context.repo.owner;
-            const repo = context.repo.repo;
-            const prNumber = context.issue.number;
-
-            // Get team members
-            const { data: teamMembers } = await github.rest.teams.listMembersInOrg({
-              org: org,
-              team_slug: teamSlug,
-            });
-
-            // Get random team members (up to 2)
-            const shuffled = teamMembers.sort(() => 0.5 - Math.random());
-            const selectedReviewers = shuffled.slice(0, 2).map(member => member.login);
-
-            // Assign reviewers
-            await github.rest.pulls.requestReviewers({
-              owner: org,
-              repo: repo,
-              pull_number: prNumber,
-              reviewers: selectedReviewers,
-            });
-
-            console.log(`Assigned reviewers: ${selectedReviewers.join(', ')}`);
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: sneha.amruth24
