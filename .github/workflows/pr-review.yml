@@ -1,23 +1,24 @@
 name: Assign Reviewer on Label
+
 on:
   pull_request:
     types: [labeled]
-  pull_request_review:
-    types: [submitted]
+
 jobs:
   assign-reviewer:
     if: github.event.label.name == 'READY FOR PEER REVIEW'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up GitHub CLI
-        uses: cli/cli-action@v2
-        with:
-          gh-version: latest
-
       - name: Assign reviewer
-        run: gh pr review --add-reviewer johnkale2410 --repo ${{ github.repository }} --pull-request ${{ github.event.pull_request.number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const reviewer = 'johnkale2410'; // The GitHub username of the reviewer
+            const prNumber = context.payload.pull_request.number;
+
+            await github.rest.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              reviewers: [reviewer]
+            });
