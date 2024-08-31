@@ -15,5 +15,6 @@ jobs:
         with:
           helper: assign-pr-reviewers
           login: ${{ github.event.review.user.login }}
-          reviewers: sneha.amruth24@gmail.com
+          teams: test-peer-reviewers
+          number_of_assignees: 1
           github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
