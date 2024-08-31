@@ -1,21 +1,19 @@
-name: Assign PR Reviewer
-
+name: PR Approval workflow
 on:
+  pull_request:
+    types: [labeled]
   pull_request_review:
     types: [submitted]
-    paths:
-      - "src/helpers/assign-pr-reviewers.ts"
-
 jobs:
-  test:
-    if: github.event.review.state == 'approved'
+  assign-peer-reviewers:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    if: github.event.action == 'labeled' && github.event.label.name == 'READY FOR PEER REVIEW'
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - uses: ./
+      - uses: ExpediaGroup/github-helpers@v1.62.5
         with:
           helper: assign-pr-reviewers
           login: ${{ github.event.review.user.login }}
-          github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }} # must have read:org permission
+          reviewers: sneha.amruth24@gmail.com
+          github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
