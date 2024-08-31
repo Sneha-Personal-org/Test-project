@@ -9,11 +9,15 @@ jobs:
     if: github.event.label.name == 'READY FOR PEER REVIEW'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Assign reviewer
-        uses: pull-reminders/assign-reviewer@v2
+      - name: Set up GitHub CLI
+        uses: cli/cli-action@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reviewers: johnkale2410
+          gh-version: latest
+
+      - name: Assign reviewer
+        run: gh pr review --add-reviewer johnkale2410 --repo ${{ github.repository }} --pull-request ${{ github.event.pull_request.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
