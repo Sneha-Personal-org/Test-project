@@ -17,4 +17,4 @@ jobs:
           login: ${{ github.event.review.user.login }}
           teams: test-peer-reviewers
           number_of_assignees: 1
-          github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
