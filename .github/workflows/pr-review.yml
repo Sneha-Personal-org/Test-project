@@ -10,7 +10,7 @@ jobs:
     if: github.event.label.name == 'READY FOR PEER REVIEW'
     steps:
       - name: Assign team members as reviewers
-        uses: reviewpad/action-assign-reviewers@v1.3
+        uses: actions/github-script@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{secrets.GITHUB_TOKEN}}
           team: test-peer-reviewers
