@@ -1,9 +1,9 @@
 name: Assign Reviewer on Label
-
 on:
-  issues:
+  pull_request_review:
+    types: [submitted]
+  pull_request:
     types: [labeled]
-
 jobs:
   assign-reviewer:
     if: github.event.label.name == 'READY FOR PEER REVIEW'
