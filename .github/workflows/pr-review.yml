@@ -16,4 +16,4 @@ jobs:
         uses: pull-reminders/assign-reviewer@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          reviewers: sneha.amruth24
+          reviewers: johnkale2410
