@@ -1,19 +1,23 @@
-name: PR Labeler
+name: Label New Pull Requests
+
 on:
   pull_request:
     types: [opened]
 
-permissions:
-  contents: read
-
 jobs:
-  pr-labeler:
-    permissions:
-      contents: read # for TimonVS/pr-labeler-action to read config file
-      pull-requests: write # for TimonVS/pr-labeler-action to add labels in PR
+  label_pull_request:
     runs-on: ubuntu-latest
     steps:
-      - uses: TimonVS/pr-labeler-action@v5
+      - name: Add Label to PR
+        uses: actions/github-script@v6
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          configuration-path: .github/pr-labeler.yml # optional, .github/pr-labeler.yml is the default value
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const labelToAdd = 'needs review';  // Change this to your desired label
+
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: [labelToAdd]
+            })
