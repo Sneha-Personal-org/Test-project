@@ -1,4 +1,4 @@
-name: Test First Action
+name: Run Test cases
 on: push
 jobs:
   test:
