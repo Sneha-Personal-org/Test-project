@@ -1,21 +1,19 @@
-name: Label Pull Requests as Ready for Review
-
+name: PR Labeler
 on:
   pull_request:
     types: [opened]
 
+permissions:
+  contents: read
+
 jobs:
-  label_pull_request:
+  pr-labeler:
+    permissions:
+      contents: read # for TimonVS/pr-labeler-action to read config file
+      pull-requests: write # for TimonVS/pr-labeler-action to add labels in PR
     runs-on: ubuntu-latest
     steps:
-      - name: Label as Ready for Review
-        uses: actions/github-script@v6
+      - uses: TimonVS/pr-labeler-action@v5
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.rest.issues.addLabels({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              labels: ["READY FOR REVIEW"]
-            })
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/pr-labeler.yml # optional, .github/pr-labeler.yml is the default value
