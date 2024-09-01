@@ -1,0 +1,23 @@
+name: Label New Pull Requests
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  label_pull_request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add Label to PR
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const labelToAdd = 'needs review';  // Change this to your desired label
+
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: [labelToAdd]
+            })

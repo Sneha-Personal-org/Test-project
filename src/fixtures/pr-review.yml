@@ -16,6 +16,8 @@ jobs:
         uses: cli/cli-action@v2
         with:
           gh-version: latest
+      - name: assign reviewer
+        run: echo "assigning..."
 
       - name: Assign reviewer
         run: gh pr review --add-reviewer sneha.amruth24 --repo ${{ github.repository }} --pull-request ${{ github.event.pull_request.number }}
